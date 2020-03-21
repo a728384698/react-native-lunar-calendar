@@ -1,5 +1,5 @@
 ### react-native-newLunar-calendar
-fork原项目地址：[download-url]: https://npmjs.org/package/react-native-lunar-calendar
+fork原项目地址： https://npmjs.org/package/react-native-lunar-calendar
 
 [![Known Vulnerabilities][snyk-image]][snyk-url]
 [![npm download][download-image]][download-url]
@@ -7,11 +7,11 @@ fork原项目地址：[download-url]: https://npmjs.org/package/react-native-lun
 [snyk-image]: https://snyk.io/test/npm/react-native-lunar-calendar/badge.svg?style=flat-square
 [snyk-url]: https://snyk.io/test/npm/react-native-lunar-calendar
 [download-image]: https://img.shields.io/npm/dm/react-native-lunar-calendar.svg?style=flat-square
-[download-url]: https://npmjs.org/package/react-native-lunar-calendar
+[download-url]: https://github.com/a728384698/react-native-newLunar-calendar.git
 
 A lunar calendar component for react-native.
 
-[GitHub](https://github.com/Txiaozhe/react-native-lunar-calendar.git)
+[GitHub](https://github.com/a728384698/react-native-newLunar-calendar.git)
 
 ### Getting Started
 
