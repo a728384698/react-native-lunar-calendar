@@ -55,11 +55,12 @@ export default class Calendar extends Component {
     this.props.onMonthSelect(date)
   };
 
-  onSelectedChange = (date) => {
+  onSelectedChange = (new_date,date) => {
+    console.log("onSelectedChange",date)
     this.setState({
       current: date
     });
-    this.props.onDateSelect(date);
+    this.props.onDateSelect(new_date,date);
   };
 
   render() {
