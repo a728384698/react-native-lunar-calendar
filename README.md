@@ -9,18 +9,15 @@ fork原项目地址： https://npmjs.org/package/react-native-lunar-calendar
 [download-image]: https://img.shields.io/npm/dm/react-native-lunar-calendar.svg?style=flat-square
 [download-url]: https://github.com/a728384698/react-native-newLunar-calendar.git
 
-A lunar calendar component for react-native.
-
-[GitHub](https://github.com/a728384698/react-native-newLunar-calendar.git)
 
 ### Getting Started
 
   ```shell
-$ npm install react-native-lunar-calendar --save
+$ npm install react-native-newLunar-calendar --save
   ```
 
 ```jsx
-import Calender from "react-native-lunar-calendar";
+import Calender from "react-native-newLunar-calendar";
 
 ...
 render() {
