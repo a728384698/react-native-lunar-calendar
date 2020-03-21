@@ -13,7 +13,7 @@ fork原项目地址： https://npmjs.org/package/react-native-lunar-calendar
 ### Getting Started
 
   ```shell
-$ npm install react-native-newLunar-calendar --save
+$ yarn add react-native-newLunar-calendar --save
   ```
 
 ```jsx
