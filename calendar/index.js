@@ -56,7 +56,6 @@ export default class Calendar extends Component {
   };
 
   onSelectedChange = (new_date,date) => {
-    console.log("onSelectedChange",date)
     this.setState({
       current: date
     });
@@ -77,6 +76,7 @@ export default class Calendar extends Component {
           dateStyle={this.props.dateStyle}
           selectDateStyle={this.props.selectDateStyle}
           weekendStyle={this.props.weekendStyle}
+          almanacDefalutColor={this.props.almanacDefalutColor}
           current={current}
           date={date}
           onSelectedChange={this.onSelectedChange}/>

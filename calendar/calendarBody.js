@@ -32,13 +32,15 @@ import {
   StyleSheet
 } from "react-native";
 
-import getLunarDate from "./getLunarDate";
+import  getLunarDate from "./getLunarDate";
 import {Style, Color} from "../res";
 
 export default class CalendarBody extends Component {
   constructor(props) {
     super(props);
-    this.state = {}
+    this.state = {
+      almanac_data:null
+    }
   }
 
   getFirstDay = (year, month) => {
@@ -80,11 +82,12 @@ export default class CalendarBody extends Component {
     this.props.onSelectedChange(new_date,new Date(year, month - 1, day), selectAction);
   };
 
-  render() {
+  render () {
     //let self = this;
     let date = this.props.date;
     let year = date.getFullYear();
     let month = date.getMonth() + 1;
+    let day = date.getDate()
 
     let curDate = this.props.current;
     let curYear = curDate.getFullYear();
@@ -93,6 +96,13 @@ export default class CalendarBody extends Component {
     let cur = {
       backgroundColor: "#6A9983"
     };
+    getBaiduMonthCalendarBody(year + "-" + month + "-" + day, (almanac_data) => this.almanac_data = almanac_data)
+    let mb_arr=[];
+    this.almanac_data &&  this.almanac_data.map((info, index) => {
+      if (info.suit.includes('修造')) {
+        mb_arr.push({suit:info.suit,day:index+1})
+      }
+    })
     let table = this.getCalendarTable(year, month);
     let rows = table.map((row, rowId) => {
       let days = row.map((day, index) => {
@@ -106,18 +116,23 @@ export default class CalendarBody extends Component {
         });
         let className = [styles.day, styles.center, styles.date, this.props.dateStyle];
         if (isWeekend) className.push(this.props.weekendStyle ? this.props.weekendStyle : styles.weekend);
+        mb_arr.map((info,idx) => {
+          if (info.day ==day) {
+            className.push(this.props.almanacDefalutColor)
+          }
+        })
         if (isCur) className.push(this.props.selectDateStyle ? this.props.selectDateStyle : cur);
-      
         if (day) {
           lunarDate = getLunarDate(new Date(year, month - 1, day));
           lunarDateView = (
-            <View>
+            <View >
               <Text style={styles.lunar}>
                 {(lunarDate.day == "初一") ? (lunarDate.month + "月") : (lunarDate.day)}
               </Text>
             </View>
           );
         }
+        
         return (
           <TouchableOpacity
             key={index}
@@ -144,6 +159,31 @@ export default class CalendarBody extends Component {
   }
 }
 
+//通过百度获取查询月份黄道吉日
+export function getBaiduMonthCalendarBody (date,callback) {
+  let url_baidu = 'http://opendata.baidu.com/api.php?query=' +
+  date +
+    '&resource_id=6018&format=json'
+  var request = new XMLHttpRequest();
+     request.onreadystatechange = (e) => {
+       if (request.readyState !== 4) {
+         return;
+       }
+ 
+       if (request.status === 200) {
+         let json_data = JSON.parse(request.responseText) //转json
+         let  almanac_data = json_data.data[0].almanac
+      callback(almanac_data)
+       } else {
+         alert("请求失败！");
+       }
+     };
+ 
+     request.open('GET', url_baidu);
+      request.send();
+
+
+}
 const styles = StyleSheet.create({
   text_center: {
     justifyContent: "center",

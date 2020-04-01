@@ -91,8 +91,6 @@ function e2c(date) {
 }
 
 function getLunarDate(date) {
-  //console.log("date======" + typeof (date));
-  //let year = typeof(date) === Date ? date.getFullYear() : null;
   let year = date.getFullYear();
   let month;
   let day;
@@ -112,7 +110,6 @@ function getLunarDate(date) {
   else if (day < 30) lunarDay += "廿";
   else lunarDay += "三十";
   if (day % 10 || day === 10) lunarDay += numString.charAt((day - 1) % 10);
-
   return {
     year: tgString.charAt((year - 4) % 10) + dzString.charAt((year - 4) % 12),
     zodiac: sx.charAt((year - 4) % 12),
@@ -122,8 +119,9 @@ function getLunarDate(date) {
     day: lunarDay
   };
 }
-//
-//     return getLunarDate;
-// }));
 
 module.exports = getLunarDate;
+
+
+
+
