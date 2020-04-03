@@ -29,7 +29,8 @@ import {
   View,
   Text,
   TouchableOpacity,
-  StyleSheet
+  StyleSheet,
+  DeviceEventEmitter
 } from "react-native";
 
 import  getLunarDate from "./getLunarDate";
@@ -39,7 +40,6 @@ export default class CalendarBody extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      almanac_data:null
     }
   }
 
@@ -81,6 +81,23 @@ export default class CalendarBody extends Component {
     let new_date = year + '-' + month + '-' + day;
     this.props.onSelectedChange(new_date,new Date(year, month - 1, day), selectAction);
   };
+  componentDidMount () {
+    let date = this.props.date;
+    let year = date.getFullYear();
+    let month = date.getMonth() + 1;
+    let day = date.getDate()
+    this.updateCalendar(year + "-" + month + "-" + day)
+  this.subSc = DeviceEventEmitter.addListener("UpdateCalendar",(data)=>this.updateCalendar(data.date))
+}
+
+  updateCalendar (forkDate = '') {
+
+    let userDate = forkDate 
+    console.log("执行了代码")
+    this.getBaiduMonthCalendarBody(userDate, (almanac_data) =>
+    { this.almanac_data = almanac_data;this.setState({})})
+   
+  }
 
   render () {
     //let self = this;
@@ -96,11 +113,16 @@ export default class CalendarBody extends Component {
     let cur = {
       backgroundColor: "#6A9983"
     };
-    getBaiduMonthCalendarBody(year + "-" + month + "-" + day, (almanac_data) => this.almanac_data = almanac_data)
+    // if (this.state.ifRefresh == false) {
+    //   console.log("this.state.ifRefresh",this.state.ifRefresh)
+    //   this.getBaiduMonthCalendarBody(year + "-" + month + "-" + day, (almanac_data) =>
+    // { this.almanac_data = almanac_data})
+   
+    // }
     let mb_arr=[];
     this.almanac_data &&  this.almanac_data.map((info, index) => {
       if (info.suit.includes('修造')) {
-        mb_arr.push({suit:info.suit,day:index+1})
+        mb_arr.push({suit:info.suit,day:index+1,avoid:info.avoid})
       }
     })
     let table = this.getCalendarTable(year, month);
@@ -112,12 +134,17 @@ export default class CalendarBody extends Component {
         let lunarDateView;
         let pressCb = (isCur ? () => {
         } : () => {
+          this.props.callBackData(this.almanac_data[day-1])
           this.onClickCallback(year, month, day);
         });
         let className = [styles.day, styles.center, styles.date, this.props.dateStyle];
         if (isWeekend) className.push(this.props.weekendStyle ? this.props.weekendStyle : styles.weekend);
-        mb_arr.map((info,idx) => {
-          if (info.day ==day) {
+        console.log('mb_arr',mb_arr)
+        mb_arr && mb_arr.map((info, idx) => {
+          console.log("info.day", info.day, day)
+            //  this.props.callBackData(this.almanac_data[day-1])
+          if (info.day == day) {
+         
             className.push(this.props.almanacDefalutColor)
           }
         })
@@ -132,7 +159,7 @@ export default class CalendarBody extends Component {
             </View>
           );
         }
-        
+     
         return (
           <TouchableOpacity
             key={index}
@@ -157,33 +184,62 @@ export default class CalendarBody extends Component {
       </View>
     );
   }
+  getBaiduMonthCalendarBody (date, callback) {
+    console.log('date',date)
+    let url_baidu = 'http://opendata.baidu.com/api.php?query=' +
+    date +
+      '&resource_id=6018&format=json'
+    var request = new XMLHttpRequest();
+       request.onreadystatechange = (e) => {
+         if (request.readyState !== 4) {
+           return;
+         }
+   
+         if (request.status === 200) {
+           let json_data = JSON.parse(request.responseText) //转json
+           let almanac_data = json_data.data[0].almanac
+           
+        callback(almanac_data)
+         } else {
+           alert("请求失败！");
+         }
+       };
+   
+       request.open('GET', url_baidu);
+        request.send();
+  
+  
+  }
 }
 
 //通过百度获取查询月份黄道吉日
-export function getBaiduMonthCalendarBody (date,callback) {
-  let url_baidu = 'http://opendata.baidu.com/api.php?query=' +
-  date +
-    '&resource_id=6018&format=json'
-  var request = new XMLHttpRequest();
-     request.onreadystatechange = (e) => {
-       if (request.readyState !== 4) {
-         return;
-       }
+// export function getBaiduMonthCalendarBody (date, callback) {
+
+//   console.log('date',date)
+//   let url_baidu = 'http://opendata.baidu.com/api.php?query=' +
+//   date +
+//     '&resource_id=6018&format=json'
+//   var request = new XMLHttpRequest();
+//      request.onreadystatechange = (e) => {
+//        if (request.readyState !== 4) {
+//          return;
+//        }
  
-       if (request.status === 200) {
-         let json_data = JSON.parse(request.responseText) //转json
-         let  almanac_data = json_data.data[0].almanac
-      callback(almanac_data)
-       } else {
-         alert("请求失败！");
-       }
-     };
+//        if (request.status === 200) {
+//          let json_data = JSON.parse(request.responseText) //转json
+//          let  almanac_data = json_data.data[0].almanac
+//       callback(almanac_data)
+//        } else {
+//          alert("请求失败！");
+//        }
+//      };
  
-     request.open('GET', url_baidu);
-      request.send();
+//      request.open('GET', url_baidu);
+//       request.send();
+
+// }
 
 
-}
 const styles = StyleSheet.create({
   text_center: {
     justifyContent: "center",

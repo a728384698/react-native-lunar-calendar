@@ -79,6 +79,7 @@ export default class Calendar extends Component {
           almanacDefalutColor={this.props.almanacDefalutColor}
           current={current}
           date={date}
+          callBackData={(data)=>this.props.callBackData(data)}
           onSelectedChange={this.onSelectedChange}/>
       </View>
     );

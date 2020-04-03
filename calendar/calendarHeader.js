@@ -29,11 +29,13 @@ import {
   View,
   Text,
   TouchableOpacity,
-  StyleSheet
+  StyleSheet,
+  DeviceEventEmitter
 } from "react-native";
 
 import getLunarDate from "./getLunarDate";
 import {Style, Color} from "../res";
+import { getBaiduMonthCalendarBody } from "react-native-newLunar-calendar/calendar/calendarBody";
 
 export default class CalendarHeader extends Component {
   constructor(props) {
@@ -48,6 +50,7 @@ export default class CalendarHeader extends Component {
 
       lYear: getLunarDate(this.date).year,
       lAniYear: getLunarDate(this.date).zodiac
+
     };
   }
 
@@ -64,6 +67,9 @@ export default class CalendarHeader extends Component {
         year: _year,
       });
     }
+    let preMonth = _month--
+    let dataCan = _year + '-'+ preMonth +'-'+ this.state.day 
+    DeviceEventEmitter.emit('UpdateCalendar',{date:dataCan})
     this.props.onNavChange(new Date(_year, _month - 1));
     this.setState({
       lYear: getLunarDate(new Date(_year, _month)).year,
@@ -85,6 +91,9 @@ export default class CalendarHeader extends Component {
         year: _year,
       });
     }
+    let nextMonth = _month++
+    let dataCan = _year + '-'+ nextMonth +'-'+ this.state.day 
+    DeviceEventEmitter.emit('UpdateCalendar',{date:dataCan})
     this.props.onNavChange(new Date(_year, _month - 1));
     this.setState({
       lYear: getLunarDate(new Date(_year, _month)).year,
