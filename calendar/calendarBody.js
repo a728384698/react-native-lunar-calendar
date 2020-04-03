@@ -22,232 +22,218 @@
  * SOFTWARE.
  */
 
-"use strict";
+'use strict'
 
-import React, {Component} from "react";
+import React, { Component } from 'react'
 import {
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
   DeviceEventEmitter
-} from "react-native";
+} from 'react-native'
 
-import  getLunarDate from "./getLunarDate";
-import {Style, Color} from "../res";
+import getLunarDate from './getLunarDate'
+import { Style, Color } from '../res'
 
 export default class CalendarBody extends Component {
   constructor(props) {
-    super(props);
-    this.state = {
-    }
+    super(props)
+    this.state = {}
   }
 
   getFirstDay = (year, month) => {
-    let firstDay = new Date(year, month - 1, 1);
-    return firstDay.getDay();
-  };
-
-  getMonthLen = (year, month) => {
-    let nextMonth = new Date(year, month, 1);
-    nextMonth.setHours(nextMonth.getHours() - 3);
-    return nextMonth.getDate();
-  };
-
-  getCalendarTable = (year, month) => {
-    let monthLen = this.getMonthLen(year, month);
-    let firstDay = this.getFirstDay(year, month);
-    let list = [[]];
-    let i, cur, row, col;
-    for (i = firstDay; i--;) {
-      list[0].push('');
-    }
-    for (i = 1; i <= monthLen; i++) {
-      cur = i + firstDay - 1;
-      row = Math.floor(cur / 7);
-      col = cur % 7;
-      list[row] = list[row] || [];
-      list[row].push(i);
-    }
-    let lastRow = list[row];
-    let remain = 7 - list[row].length;
-    for (i = 7 - lastRow.length; i--;) {
-      lastRow.push('');
-    }
-    return list;
-  };
-
-  onClickCallback = (year, month, day, selectAction) => {
-    let new_date = year + '-' + month + '-' + day;
-    this.props.onSelectedChange(new_date,new Date(year, month - 1, day), selectAction);
-  };
-  componentDidMount () {
-    let date = this.props.date;
-    let year = date.getFullYear();
-    let month = date.getMonth() + 1;
-    let day = date.getDate()
-    this.updateCalendar(year + "-" + month + "-" + day)
-  this.subSc = DeviceEventEmitter.addListener("UpdateCalendar",(data)=>this.updateCalendar(data.date))
-}
-
-  updateCalendar (forkDate = '') {
-
-    let userDate = forkDate 
-    console.log("执行了代码")
-    this.getBaiduMonthCalendarBody(userDate, (almanac_data) =>
-    { this.almanac_data = almanac_data;this.setState({})})
-   
+    let firstDay = new Date(year, month - 1, 1)
+    return firstDay.getDay()
   }
 
-  render () {
+  getMonthLen = (year, month) => {
+    let nextMonth = new Date(year, month, 1)
+    nextMonth.setHours(nextMonth.getHours() - 3)
+    return nextMonth.getDate()
+  }
+
+  getCalendarTable = (year, month) => {
+    let monthLen = this.getMonthLen(year, month)
+    let firstDay = this.getFirstDay(year, month)
+    let list = [[]]
+    let i, cur, row, col
+    for (i = firstDay; i--; ) {
+      list[0].push('')
+    }
+    for (i = 1; i <= monthLen; i++) {
+      cur = i + firstDay - 1
+      row = Math.floor(cur / 7)
+      col = cur % 7
+      list[row] = list[row] || []
+      list[row].push(i)
+    }
+    let lastRow = list[row]
+    let remain = 7 - list[row].length
+    for (i = 7 - lastRow.length; i--; ) {
+      lastRow.push('')
+    }
+    return list
+  }
+
+  onClickCallback = (year, month, day, selectAction) => {
+    let new_date = year + '-' + month + '-' + day
+    this.props.onSelectedChange(
+      new_date,
+      new Date(year, month - 1, day),
+      selectAction
+    )
+  }
+  componentDidMount() {
+    let date = this.props.date
+    let year = date.getFullYear()
+    let month = date.getMonth() + 1
+    let day = date.getDate()
+    this.updateCalendar(year + '-' + month + '-' + day)
+    this.subSc = DeviceEventEmitter.addListener('UpdateCalendar', data =>
+      this.updateCalendar(data.date)
+    )
+  }
+
+  updateCalendar(forkDate = '') {
+    let userDate = forkDate
+    console.log('执行了代码')
+    this.getBaiduMonthCalendarBody(userDate, almanac_data => {
+      this.almanac_data = almanac_data
+      this.setState({})
+    })
+  }
+
+  render() {
     //let self = this;
-    let date = this.props.date;
-    let year = date.getFullYear();
-    let month = date.getMonth() + 1;
+    let date = this.props.date
+    let year = date.getFullYear()
+    let month = date.getMonth() + 1
     let day = date.getDate()
 
-    let curDate = this.props.current;
-    let curYear = curDate.getFullYear();
-    let curMonth = curDate.getMonth() + 1;
-    let curDay = curDate.getDate();
+    let curDate = this.props.current
+    let curYear = curDate.getFullYear()
+    let curMonth = curDate.getMonth() + 1
+    let curDay = curDate.getDate()
     let cur = {
-      backgroundColor: "#6A9983"
-    };
+      backgroundColor: '#6A9983'
+    }
     // if (this.state.ifRefresh == false) {
     //   console.log("this.state.ifRefresh",this.state.ifRefresh)
     //   this.getBaiduMonthCalendarBody(year + "-" + month + "-" + day, (almanac_data) =>
     // { this.almanac_data = almanac_data})
-   
+
     // }
-    let mb_arr=[];
-    this.almanac_data &&  this.almanac_data.map((info, index) => {
-      if (info.suit.includes('修造')) {
-        mb_arr.push({suit:info.suit,day:index+1,avoid:info.avoid})
-      }
-    })
-    let table = this.getCalendarTable(year, month);
+    let mb_arr = []
+    this.almanac_data &&
+      this.almanac_data.map((info, index) => {
+        if (info.suit.includes('修造')) {
+          mb_arr.push({ suit: info.suit, day: index + 1, avoid: info.avoid })
+        }
+      })
+    let table = this.getCalendarTable(year, month)
     let rows = table.map((row, rowId) => {
       let days = row.map((day, index) => {
-        let isCur = (year === curYear) && (month === curMonth) && (day === curDay);
-        let isWeekend = index === 0 || index === 6;
-        let lunarDate;
-        let lunarDateView;
-        let pressCb = (isCur ? () => {
-        } : () => {
-          this.props.callBackData(this.almanac_data[day-1])
-          this.onClickCallback(year, month, day);
-        });
-        let className = [styles.day, styles.center, styles.date, this.props.dateStyle];
-        if (isWeekend) className.push(this.props.weekendStyle ? this.props.weekendStyle : styles.weekend);
-        console.log('mb_arr',mb_arr)
-        mb_arr && mb_arr.map((info, idx) => {
-          console.log("info.day", info.day, day)
+        let isCur = year === curYear && month === curMonth && day === curDay
+        let isWeekend = index === 0 || index === 6
+        let lunarDate
+        let lunarDateView
+        let pressCb = isCur
+          ? () => {}
+          : () => {
+              this.props.callBackData(this.almanac_data[day - 1])
+              this.onClickCallback(year, month, day)
+            }
+        let className = [
+          styles.day,
+          styles.center,
+          styles.date,
+          this.props.dateStyle
+        ]
+        if (isWeekend)
+          className.push(
+            this.props.weekendStyle ? this.props.weekendStyle : styles.weekend
+          )
+        console.log('mb_arr', mb_arr)
+        mb_arr &&
+          mb_arr.map((info, idx) => {
+            console.log('info.day', info.day, day)
             //  this.props.callBackData(this.almanac_data[day-1])
-          if (info.day == day) {
-         
-            className.push(this.props.almanacDefalutColor)
-          }
-        })
-        if (isCur) className.push(this.props.selectDateStyle ? this.props.selectDateStyle : cur);
+            if (info.day == day) {
+              className.push(this.props.almanacDefalutColor)
+            }
+          })
+        if (isCur)
+          className.push(
+            this.props.selectDateStyle ? this.props.selectDateStyle : cur
+          )
         if (day) {
-          lunarDate = getLunarDate(new Date(year, month - 1, day));
+          lunarDate = getLunarDate(new Date(year, month - 1, day))
           lunarDateView = (
-            <View >
+            <View>
               <Text style={styles.lunar}>
-                {(lunarDate.day == "初一") ? (lunarDate.month + "月") : (lunarDate.day)}
+                {lunarDate.day == '初一'
+                  ? lunarDate.month + '月'
+                  : lunarDate.day}
               </Text>
             </View>
-          );
+          )
         }
-     
+
         return (
-          <TouchableOpacity
-            key={index}
-            style={[className]}
-            onPress={pressCb}>
+          <TouchableOpacity key={index} style={[className]} onPress={pressCb}>
             <Text>{day}</Text>
             {lunarDateView}
           </TouchableOpacity>
-        );
-      });
+        )
+      })
       return (
-        <View
-          key={rowId}
-          style={[styles.row]}>
+        <View key={rowId} style={[styles.row]}>
           <View style={styles.row}>{days}</View>
         </View>
-      );
-    });
+      )
+    })
     return (
       <View style={[styles.rows]}>
         <View>{rows}</View>
       </View>
-    );
+    )
   }
-  getBaiduMonthCalendarBody (date, callback) {
-    console.log('date',date)
-    let url_baidu = 'http://opendata.baidu.com/api.php?query=' +
-    date +
+  getBaiduMonthCalendarBody(date, callback) {
+    console.log('date', date)
+    let url_baidu =
+      'http://opendata.baidu.com/api.php?query=' +
+      date +
       '&resource_id=6018&format=json'
-    var request = new XMLHttpRequest();
-       request.onreadystatechange = (e) => {
-         if (request.readyState !== 4) {
-           return;
-         }
-   
-         if (request.status === 200) {
-           let json_data = JSON.parse(request.responseText) //转json
-           let almanac_data = json_data.data[0].almanac
-           
+    var request = new XMLHttpRequest()
+    request.onreadystatechange = e => {
+      if (request.readyState !== 4) {
+        return
+      }
+
+      if (request.status === 200) {
+        let json_data = JSON.parse(request.responseText) //转json
+        let almanac_data = json_data.data[0].almanac
+
         callback(almanac_data)
-         } else {
-           alert("请求失败！");
-         }
-       };
-   
-       request.open('GET', url_baidu);
-        request.send();
-  
-  
+      } else {
+        alert('请求失败！')
+      }
+    }
+
+    request.open('GET', url_baidu)
+    request.send()
   }
 }
 
-//通过百度获取查询月份黄道吉日
-// export function getBaiduMonthCalendarBody (date, callback) {
-
-//   console.log('date',date)
-//   let url_baidu = 'http://opendata.baidu.com/api.php?query=' +
-//   date +
-//     '&resource_id=6018&format=json'
-//   var request = new XMLHttpRequest();
-//      request.onreadystatechange = (e) => {
-//        if (request.readyState !== 4) {
-//          return;
-//        }
- 
-//        if (request.status === 200) {
-//          let json_data = JSON.parse(request.responseText) //转json
-//          let  almanac_data = json_data.data[0].almanac
-//       callback(almanac_data)
-//        } else {
-//          alert("请求失败！");
-//        }
-//      };
- 
-//      request.open('GET', url_baidu);
-//       request.send();
-
-// }
-
-
 const styles = StyleSheet.create({
   text_center: {
-    justifyContent: "center",
-    alignItems: "center"
+    justifyContent: 'center',
+    alignItems: 'center'
   },
 
   row: {
-    flexDirection: "row"
+    flexDirection: 'row'
   },
 
   date: {
@@ -256,9 +242,9 @@ const styles = StyleSheet.create({
   },
 
   center: {
-    justifyContent: "center",
-    flexDirection: "column",
-    alignItems: "center"
+    justifyContent: 'center',
+    flexDirection: 'column',
+    alignItems: 'center'
   },
 
   react_calendar: {
@@ -283,4 +269,4 @@ const styles = StyleSheet.create({
   header: {
     backgroundColor: Color.white
   }
-});
+})
