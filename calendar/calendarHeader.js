@@ -22,26 +22,25 @@
  * SOFTWARE.
  */
 
-"use strict";
+'use strict'
 
-import React, {Component} from "react";
+import React, { Component } from 'react'
 import {
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
   DeviceEventEmitter
-} from "react-native";
+} from 'react-native'
 
-import getLunarDate from "./getLunarDate";
-import {Style, Color} from "../res";
-import { getBaiduMonthCalendarBody } from "react-native-newLunar-calendar/calendar/calendarBody";
+import getLunarDate from './getLunarDate'
+import { Style, Color } from '../res'
 
 export default class CalendarHeader extends Component {
   constructor(props) {
-    super(props);
+    super(props)
 
-    this.date = this.props.date;
+    this.date = this.props.date
 
     this.state = {
       year: this.date.getFullYear(),
@@ -50,87 +49,91 @@ export default class CalendarHeader extends Component {
 
       lYear: getLunarDate(this.date).year,
       lAniYear: getLunarDate(this.date).zodiac
-
-    };
+    }
   }
 
   onClickLeft = () => {
-    let _year = this.state.year;
-    let _month = this.state.month;
-    _month--;
-    this.setState({month: _month});
+    let _year = this.state.year
+    let _month = this.state.month
+    _month--
+    this.setState({ month: _month })
     if (_month === 0) {
-      _month = 12;
-      _year--;
+      _month = 12
+      _year--
       this.setState({
         month: 12,
-        year: _year,
-      });
+        year: _year
+      })
     }
     let preMonth = _month--
-    let dataCan = _year + '-'+ preMonth +'-'+ this.state.day 
-    DeviceEventEmitter.emit('UpdateCalendar',{date:dataCan})
-    this.props.onNavChange(new Date(_year, _month - 1));
+    let dataCan = _year + '-' + preMonth + '-' + this.state.day
+    DeviceEventEmitter.emit('UpdateCalendar', { date: dataCan })
+    this.props.onNavChange(new Date(_year, _month - 1))
     this.setState({
       lYear: getLunarDate(new Date(_year, _month)).year,
-      lAniYear: getLunarDate(new Date(_year, _month)).zodiac,
-    });
-  };
+      lAniYear: getLunarDate(new Date(_year, _month)).zodiac
+    })
+  }
 
   onClickRight = () => {
-    let _year = this.state.year;
-    let _month = this.state.month;
-    _month++;
+    let _year = this.state.year
+    let _month = this.state.month
+    _month++
 
-    this.setState({month: _month});
+    this.setState({ month: _month })
     if (_month === 13) {
-      _month = 1;
-      _year++;
+      _month = 1
+      _year++
       this.setState({
         month: 1,
-        year: _year,
-      });
+        year: _year
+      })
     }
     let nextMonth = _month++
-    let dataCan = _year + '-'+ nextMonth +'-'+ this.state.day 
-    DeviceEventEmitter.emit('UpdateCalendar',{date:dataCan})
-    this.props.onNavChange(new Date(_year, _month - 1));
+    let dataCan = _year + '-' + nextMonth + '-' + this.state.day
+    DeviceEventEmitter.emit('UpdateCalendar', { date: dataCan })
+    this.props.onNavChange(new Date(_year, _month - 1))
     this.setState({
       lYear: getLunarDate(new Date(_year, _month)).year,
-      lAniYear: getLunarDate(new Date(_year, _month)).zodiac,
+      lAniYear: getLunarDate(new Date(_year, _month)).zodiac
     })
-  };
+  }
 
   render() {
     return (
       <View style={[styles.container, this.props.style]}>
         <TouchableOpacity onPress={this.onClickLeft} style={Style.Center}>
-          <Text style={{fontSize: 30, marginLeft: 10}}>{"<"}</Text>
+          <Text style={{ fontSize: 30, marginLeft: 10 }}>{'<'}</Text>
         </TouchableOpacity>
         <View style={styles.date}>
-          <Text style={{fontSize: 30, }}>{this.state.year}年{this.state.month}月</Text>
-          <Text style={{fontSize: 10, marginBottom: 2}}>{this.state.lYear}{this.state.lAniYear}年</Text>
+          <Text style={{ fontSize: 30 }}>
+            {this.state.year}年{this.state.month}月
+          </Text>
+          <Text style={{ fontSize: 10, marginBottom: 2 }}>
+            {this.state.lYear}
+            {this.state.lAniYear}年
+          </Text>
         </View>
         <TouchableOpacity onPress={this.onClickRight} style={Style.Center}>
-          <Text style={{fontSize: 30, marginRight: 10}}>{">"}</Text>
+          <Text style={{ fontSize: 30, marginRight: 10 }}>{'>'}</Text>
         </TouchableOpacity>
       </View>
-    );
+    )
   }
 }
 
 const styles = StyleSheet.create({
   container: {
     height: 50,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: Color.green
   },
 
   date: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center"
+    justifyContent: 'center',
+    alignItems: 'center'
   }
-});
+})
