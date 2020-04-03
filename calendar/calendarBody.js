@@ -97,7 +97,6 @@ export default class CalendarBody extends Component {
 
   updateCalendar(forkDate = '') {
     let userDate = forkDate
-    console.log('执行了代码')
     this.getBaiduMonthCalendarBody(userDate, almanac_data => {
       this.almanac_data = almanac_data
       this.setState({})
@@ -157,8 +156,6 @@ export default class CalendarBody extends Component {
         console.log('mb_arr', mb_arr)
         mb_arr &&
           mb_arr.map((info, idx) => {
-            console.log('info.day', info.day, day)
-            //  this.props.callBackData(this.almanac_data[day-1])
             if (info.day == day) {
               className.push(this.props.almanacDefalutColor)
             }
