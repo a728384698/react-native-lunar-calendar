@@ -30,7 +30,7 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  DeviceEventEmitter
+  DeviceEventEmitter,
 } from 'react-native'
 
 import getLunarDate from './getLunarDate'
@@ -90,14 +90,14 @@ export default class CalendarBody extends Component {
     let month = date.getMonth() + 1
     let day = date.getDate()
     this.updateCalendar(year + '-' + month + '-' + day)
-    this.subSc = DeviceEventEmitter.addListener('UpdateCalendar', data =>
+    this.subSc = DeviceEventEmitter.addListener('UpdateCalendar', (data) =>
       this.updateCalendar(data.date)
     )
   }
 
   updateCalendar(forkDate = '') {
     let userDate = forkDate
-    this.getBaiduMonthCalendarBody(userDate, almanac_data => {
+    this.getBaiduMonthCalendarBody(userDate, (almanac_data) => {
       this.almanac_data = almanac_data
       this.setState({})
     })
@@ -115,14 +115,8 @@ export default class CalendarBody extends Component {
     let curMonth = curDate.getMonth() + 1
     let curDay = curDate.getDate()
     let cur = {
-      backgroundColor: '#6A9983'
+      backgroundColor: '#6A9983',
     }
-    // if (this.state.ifRefresh == false) {
-    //   console.log("this.state.ifRefresh",this.state.ifRefresh)
-    //   this.getBaiduMonthCalendarBody(year + "-" + month + "-" + day, (almanac_data) =>
-    // { this.almanac_data = almanac_data})
-
-    // }
     let mb_arr = []
     this.almanac_data &&
       this.almanac_data.map((info, index) => {
@@ -147,13 +141,12 @@ export default class CalendarBody extends Component {
           styles.day,
           styles.center,
           styles.date,
-          this.props.dateStyle
+          this.props.dateStyle,
         ]
         if (isWeekend)
           className.push(
             this.props.weekendStyle ? this.props.weekendStyle : styles.weekend
           )
-        console.log('mb_arr', mb_arr)
         mb_arr &&
           mb_arr.map((info, idx) => {
             if (info.day == day) {
@@ -197,13 +190,12 @@ export default class CalendarBody extends Component {
     )
   }
   getBaiduMonthCalendarBody(date, callback) {
-    console.log('date', date)
     let url_baidu =
       'http://opendata.baidu.com/api.php?query=' +
       date +
       '&resource_id=6018&format=json'
     var request = new XMLHttpRequest()
-    request.onreadystatechange = e => {
+    request.onreadystatechange = (e) => {
       if (request.readyState !== 4) {
         return
       }
@@ -226,27 +218,27 @@ export default class CalendarBody extends Component {
 const styles = StyleSheet.create({
   text_center: {
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
 
   row: {
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
 
   date: {
     width: Style.WidthScale(7),
-    height: Style.WidthScale(7)
+    height: Style.WidthScale(7),
   },
 
   center: {
     justifyContent: 'center',
     flexDirection: 'column',
-    alignItems: 'center'
+    alignItems: 'center',
   },
 
   react_calendar: {
     width: Style.WIDTH,
-    height: Style.HEIGHT
+    height: Style.HEIGHT,
   },
 
   weekend: {
@@ -255,15 +247,15 @@ const styles = StyleSheet.create({
 
   lunar: {
     color: Color.black,
-    fontSize: 10
+    fontSize: 10,
   },
 
   day: {
     borderBottomWidth: 1,
-    borderRightWidth: 1
+    borderRightWidth: 1,
   },
 
   header: {
-    backgroundColor: Color.white
-  }
+    backgroundColor: Color.white,
+  },
 })
