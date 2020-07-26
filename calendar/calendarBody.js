@@ -60,28 +60,34 @@ export default class CalendarBody extends Component {
   }
 
   getCalendarTable = (year, month) => {
+    
+
     let monthLen = this.getMonthLen(year, month)
     let firstDay = this.getFirstDay(year, month)
     let list = [[]]
     let i, cur, row, col
-    for (i = firstDay; i--; ) {
-      list[0].push('')
+    if (monthLen, firstDay) {
+      for (i = firstDay; i--; ) {
+        list[0].push('')
+      }
+      for (i = 1; i <= monthLen; i++) {
+        cur = i + firstDay - 1
+        row = Math.floor(cur / 7)
+        col = cur % 7
+        list[row] = list[row] || []
+        list[row].push(i)
+      }
+      let lastRow = list[row]
+      // let remain = 7 - list[row].length
+   
+      for (i = 7 - lastRow.length; i--; ) {
+        lastRow.push('')
+      }
     }
-    for (i = 1; i <= monthLen; i++) {
-      cur = i + firstDay - 1
-      row = Math.floor(cur / 7)
-      col = cur % 7
-      list[row] = list[row] || []
-      list[row].push(i)
-    }
-    let lastRow = list[row]
-    // let remain = 7 - list[row].length
-    console.log('123')
-    for (i = 7 - lastRow.length; i--; ) {
-      lastRow.push('')
-    }
-    console.log('123456')
-    return list
+      return list
+   
+    
+ 
   }
 
   onClickCallback = (year, month, day, selectAction) => {

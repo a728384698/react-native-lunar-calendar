@@ -30,7 +30,8 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  DeviceEventEmitter
+  DeviceEventEmitter,
+  Platform
 } from 'react-native'
 
 import getLunarDate from './getLunarDate'
@@ -41,6 +42,7 @@ export default class CalendarHeader extends Component {
     super(props)
 
     this.date = this.props.date
+  
     this.state = {
       year: this.date.getFullYear(),
       month: this.date.getMonth() + 1,
@@ -65,7 +67,8 @@ export default class CalendarHeader extends Component {
       })
     }
     let preMonth = _month--
-    let dataCan = _year + '-' + preMonth + '-' + this.state.day
+    let curDay = this.state.day == 0 || 3;
+    let dataCan = Platform.OS === 'ios' ? _year + '/' + preMonth + '/' + curDay :_year + '-' + preMonth + '-' + curDay
     DeviceEventEmitter.emit('UpdateCalendar', { date: dataCan })
    
     this.props.onNavChange(new Date(dataCan))
@@ -90,7 +93,7 @@ export default class CalendarHeader extends Component {
     }
     let nextMonth = _month++
     let curDay = this.state.day == 0 || 3;
-    let dataCan = _year + '-' + nextMonth + '-' + curDay
+    let dataCan = Platform.OS === 'ios' ? _year + '/' + nextMonth + '/' + curDay : _year + '-' + nextMonth + '-' + curDay
     DeviceEventEmitter.emit('UpdateCalendar', { date: dataCan })
     this.props.onNavChange(new Date(dataCan))
     this.setState({
