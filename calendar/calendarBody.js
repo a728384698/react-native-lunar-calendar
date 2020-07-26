@@ -107,9 +107,15 @@ export default class CalendarBody extends Component {
     this.subSc = DeviceEventEmitter.addListener('UpdateCalendar', (data) =>
       this.updateCalendar(data.date)
     )
+   
   }
 
-  updateCalendar(forkDate = '') {
+  componentWillUnmount () {
+    this.subSc && this.subSc.remove()
+  }
+
+  updateCalendar (forkDate = '') {
+   
     let userDate = forkDate
     this.getBaiduMonthCalendarBody(userDate, (almanac_data) => {
       this.almanac_data = almanac_data
@@ -120,7 +126,6 @@ export default class CalendarBody extends Component {
   }
 
   render() {
-    //let self = this;
     let date = this.props.date
     let year = date.getFullYear()
     let month = date.getMonth() + 1
@@ -229,7 +234,8 @@ export default class CalendarBody extends Component {
   
           callback(almanac_data)
         } catch{
-          console.log('catch')
+          // 数据解析失败，重新请求解析
+          DeviceEventEmitter.emit('UpdateCalendar', { date })
         }
        
       } else {
