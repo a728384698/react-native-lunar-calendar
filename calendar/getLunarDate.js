@@ -94,10 +94,9 @@ function getLunarDate(date) {
   let year = date.getFullYear();
   let month;
   let day;
-  if (year < 1921 || year > 2020) {
+  if (year < 1921 || year > 2100) {
     return {};
   }
-
   date = e2c(date);
   year = date.year;
   month = date.month;

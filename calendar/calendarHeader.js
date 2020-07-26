@@ -41,12 +41,11 @@ export default class CalendarHeader extends Component {
     super(props)
 
     this.date = this.props.date
-
     this.state = {
       year: this.date.getFullYear(),
       month: this.date.getMonth() + 1,
-      day: this.date.getDay(),
-
+      day: this.date.getDate() ,
+      // day: this.date.getDay() ,
       lYear: getLunarDate(this.date).year,
       lAniYear: getLunarDate(this.date).zodiac
     }
@@ -68,7 +67,8 @@ export default class CalendarHeader extends Component {
     let preMonth = _month--
     let dataCan = _year + '-' + preMonth + '-' + this.state.day
     DeviceEventEmitter.emit('UpdateCalendar', { date: dataCan })
-    this.props.onNavChange(new Date(_year, _month - 1))
+   
+    this.props.onNavChange(new Date(dataCan))
     this.setState({
       lYear: getLunarDate(new Date(_year, _month)).year,
       lAniYear: getLunarDate(new Date(_year, _month)).zodiac
@@ -79,7 +79,6 @@ export default class CalendarHeader extends Component {
     let _year = this.state.year
     let _month = this.state.month
     _month++
-
     this.setState({ month: _month })
     if (_month === 13) {
       _month = 1
@@ -90,9 +89,10 @@ export default class CalendarHeader extends Component {
       })
     }
     let nextMonth = _month++
-    let dataCan = _year + '-' + nextMonth + '-' + this.state.day
+    let curDay = this.state.day == 0 || 3;
+    let dataCan = _year + '-' + nextMonth + '-' + curDay
     DeviceEventEmitter.emit('UpdateCalendar', { date: dataCan })
-    this.props.onNavChange(new Date(_year, _month - 1))
+    this.props.onNavChange(new Date(dataCan))
     this.setState({
       lYear: getLunarDate(new Date(_year, _month)).year,
       lAniYear: getLunarDate(new Date(_year, _month)).zodiac

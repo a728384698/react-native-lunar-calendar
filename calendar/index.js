@@ -1,4 +1,10 @@
 /*
+ * @Date: 2020-04-07 11:39:43
+ * @LastEditors: 魏盛华
+ * @LastEditTime: 2020-07-26 11:00:31
+ * @Author: 魏盛华
+ */ 
+/*
  * MIT License
  *
  * Copyright (c) 2017 Tang Xiaozhe.
@@ -55,7 +61,7 @@ export default class Calendar extends Component {
     this.props.onMonthSelect(date)
   };
 
-  onSelectedChange = (new_date,date) => {
+  onSelectedChange = (new_date, date) => {
     this.setState({
       current: date
     });
@@ -70,7 +76,8 @@ export default class Calendar extends Component {
         <CalendarHeader
           style={this.props.headerStyle}
           date={date}
-          onNavChange={this.onNavChange}/>
+          onNavChange={this.onNavChange}
+        />
         <CalendarHead style={this.props.weekHeadStyle}/>
         <CalendarBody
           dateStyle={this.props.dateStyle}

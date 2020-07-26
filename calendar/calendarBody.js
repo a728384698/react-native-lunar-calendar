@@ -35,16 +35,22 @@ import {
 
 import getLunarDate from './getLunarDate'
 import { Style, Color } from '../res'
+import Tip from '../../../scripts/util/tips'
 
 export default class CalendarBody extends Component {
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = {
+      isClick:false //防止多次点击
+    }
   }
 
   getFirstDay = (year, month) => {
-    let firstDay = new Date(year, month - 1, 1)
-    return firstDay.getDay()
+  
+    let weekDays = ['周日','周1','周2','周3','周4','周5','周6'];
+    let day = new Date(year, month - 1, 1).getDay();
+    let weekDay = weekDays[day];
+    return day
   }
 
   getMonthLen = (year, month) => {
@@ -69,10 +75,12 @@ export default class CalendarBody extends Component {
       list[row].push(i)
     }
     let lastRow = list[row]
-    let remain = 7 - list[row].length
+    // let remain = 7 - list[row].length
+    console.log('123')
     for (i = 7 - lastRow.length; i--; ) {
       lastRow.push('')
     }
+    console.log('123456')
     return list
   }
 
@@ -99,7 +107,9 @@ export default class CalendarBody extends Component {
     let userDate = forkDate
     this.getBaiduMonthCalendarBody(userDate, (almanac_data) => {
       this.almanac_data = almanac_data
-      this.setState({})
+      this.setState({
+        isClick:true
+      })
     })
   }
 
@@ -120,12 +130,15 @@ export default class CalendarBody extends Component {
     let mb_arr = []
     this.almanac_data &&
       this.almanac_data.map((info, index) => {
-        if (info.suit.includes('修造')) {
+        if (info.suit.includes('修造')|| info.suit.includes('上梁')) {
           mb_arr.push({ suit: info.suit, day: index + 1, avoid: info.avoid })
         }
       })
     let table = this.getCalendarTable(year, month)
     let rows = table.map((row, rowId) => {
+      if (!row) {
+        return Tip.ShowInfo('数据获取失败')
+      }
       let days = row.map((day, index) => {
         let isCur = year === curYear && month === curMonth && day === curDay
         let isWeekend = index === 0 || index === 6
@@ -189,29 +202,37 @@ export default class CalendarBody extends Component {
       </View>
     )
   }
-  getBaiduMonthCalendarBody(date, callback) {
-    let url_baidu =
+  getBaiduMonthCalendarBody (date, callback) {
+    if (this.state.isClick == false) {
+      let url_baidu =
       'http://opendata.baidu.com/api.php?query=' +
       date +
       '&resource_id=6018&format=json'
-    var request = new XMLHttpRequest()
+      var request = new XMLHttpRequest()
+      
+ 
     request.onreadystatechange = (e) => {
       if (request.readyState !== 4) {
         return
       }
 
       if (request.status === 200) {
-        let json_data = JSON.parse(request.responseText) //转json
-        let almanac_data = json_data.data[0].almanac
-
-        callback(almanac_data)
+        try { 
+          let json_data = JSON.parse(request.responseText) //转json
+          let almanac_data = json_data.data[0].almanac
+  
+          callback(almanac_data)
+        } catch{
+          console.log('catch')
+        }
+       
       } else {
         alert('请求失败！')
       }
     }
-
     request.open('GET', url_baidu)
     request.send()
+    }
   }
 }
 
