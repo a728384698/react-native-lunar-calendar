@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-04-07 11:39:43
  * @LastEditors: 魏盛华
- * @LastEditTime: 2020-07-26 15:16:54
+ * @LastEditTime: 2020-07-29 09:49:34
  * @Author: 魏盛华
  */ 
 /*
@@ -85,6 +85,7 @@ export default class Calendar extends Component {
           weekendStyle={this.props.weekendStyle}
           almanacDefalutColor={this.props.almanacDefalutColor}
           current={current}
+          failClickBack={this.props.failClickBack}
           date={date}
           callBackData={(data)=>this.props.callBackData(data)}
           onSelectedChange={this.onSelectedChange}/>

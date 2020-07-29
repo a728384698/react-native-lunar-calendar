@@ -66,7 +66,6 @@ export default class CalendarBody extends Component {
     let firstDay = this.getFirstDay(year, month)
     let list = [[]]
     let i, cur, row, col
-    if (monthLen, firstDay) {
       for (i = firstDay; i--; ) {
         list[0].push('')
       }
@@ -83,7 +82,6 @@ export default class CalendarBody extends Component {
       for (i = 7 - lastRow.length; i--; ) {
         lastRow.push('')
       }
-    }
       return list
    
     
@@ -158,8 +156,12 @@ export default class CalendarBody extends Component {
         let pressCb = isCur
           ? () => {}
           : () => {
+            if (this.almanac_data && this.almanac_data[day - 1]) {
               this.props.callBackData(this.almanac_data[day - 1])
               this.onClickCallback(year, month, day)
+            } else {
+              this.props.failClickBack()
+            }
             }
         let className = [
           styles.day,

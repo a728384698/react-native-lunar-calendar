@@ -67,7 +67,7 @@ export default class CalendarHeader extends Component {
       })
     }
     let preMonth = _month--
-    let curDay = this.state.day == 0 || 3;
+    let curDay = this.state.day == 0;
     let dataCan = Platform.OS === 'ios' ? _year + '/' + preMonth + '/' + curDay :_year + '-' + preMonth + '-' + curDay
     DeviceEventEmitter.emit('UpdateCalendar', { date: dataCan })
    
@@ -92,7 +92,7 @@ export default class CalendarHeader extends Component {
       })
     }
     let nextMonth = _month++
-    let curDay = this.state.day == 0 || 3;
+    let curDay = this.state.day ;
     let dataCan = Platform.OS === 'ios' ? _year + '/' + nextMonth + '/' + curDay : _year + '-' + nextMonth + '-' + curDay
     DeviceEventEmitter.emit('UpdateCalendar', { date: dataCan })
     this.props.onNavChange(new Date(dataCan))
