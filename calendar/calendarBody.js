@@ -60,8 +60,6 @@ export default class CalendarBody extends Component {
   }
 
   getCalendarTable = (year, month) => {
-    
-
     let monthLen = this.getMonthLen(year, month)
     let firstDay = this.getFirstDay(year, month)
     let list = [[]]
@@ -156,12 +154,16 @@ export default class CalendarBody extends Component {
         let pressCb = isCur
           ? () => {}
           : () => {
-            if (this.almanac_data && this.almanac_data[day - 1]) {
-              this.props.callBackData(this.almanac_data[day - 1])
-              this.onClickCallback(year, month, day)
-            } else {
-              this.props.failClickBack()
+            if (day) {
+              try {
+                  this.props.callBackData( this.almanac_data[day - 1])
+                  this.onClickCallback(year, month, day)
+          
+               } catch{
+                this.props.failClickBack()
+              }
             }
+        
             }
         let className = [
           styles.day,
@@ -241,7 +243,8 @@ export default class CalendarBody extends Component {
         }
        
       } else {
-        alert('请求失败！')
+      
+        // alert('请求失败！')
       }
     }
     request.open('GET', url_baidu)
