@@ -87,7 +87,8 @@ export default class CalendarBody extends Component {
   }
 
   onClickCallback = (year, month, day, selectAction) => {
-    let new_date = year + '-' + month + '-' + day
+    let new_date = Platform.OS === 'ios' ? year + '/' + month + '/' + day : year + '-' + month + '-' + day
+    // let new_date = year + '-' + month + '-' + day
     this.props.onSelectedChange(
       new_date,
       new Date(year, month - 1, day),
@@ -99,7 +100,8 @@ export default class CalendarBody extends Component {
     let year = date.getFullYear()
     let month = date.getMonth() + 1
     let day = date.getDate()
-    this.updateCalendar(year + '-' + month + '-' + day)
+    let apDate = Platform.OS === 'ios' ? year + '/' + month + '/' + day : year + '-' + month + '-' + day
+    this.updateCalendar(apDate)
     this.subSc = DeviceEventEmitter.addListener('UpdateCalendar', (data) =>
       this.updateCalendar(data.date)
     )
@@ -225,12 +227,10 @@ export default class CalendarBody extends Component {
       '&resource_id=6018&format=json'
       var request = new XMLHttpRequest()
       
- 
     request.onreadystatechange = (e) => {
       if (request.readyState !== 4) {
         return
       }
-
       if (request.status === 200) {
         try { 
           let json_data = JSON.parse(request.responseText) //转json
