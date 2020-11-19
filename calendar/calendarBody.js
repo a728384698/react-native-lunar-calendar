@@ -30,7 +30,7 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  DeviceEventEmitter,
+  DeviceEventEmitter,Platform
 } from 'react-native'
 
 import getLunarDate from './getLunarDate'
@@ -75,8 +75,6 @@ export default class CalendarBody extends Component {
         list[row].push(i)
       }
       let lastRow = list[row]
-      // let remain = 7 - list[row].length
-   
       for (i = 7 - lastRow.length; i--; ) {
         lastRow.push('')
       }
@@ -226,24 +224,22 @@ export default class CalendarBody extends Component {
       date +
       '&resource_id=6018&format=json'
       var request = new XMLHttpRequest()
-      
-    request.onreadystatechange = (e) => {
+      request.onreadystatechange = (e) => {
+        try { 
       if (request.readyState !== 4) {
         return
       }
       if (request.status === 200) {
-        try { 
+      
           let json_data = JSON.parse(request.responseText) //转json
           let almanac_data = json_data.data[0].almanac
-  
           callback(almanac_data)
-        } catch{
-          // 数据解析失败，重新请求解析
-          DeviceEventEmitter.emit('UpdateCalendar', { date })
-        }
-       
-      } else {
+        } 
+      } catch{
+        // 数据解析失败，重新请求解析
+        DeviceEventEmitter.emit('UpdateCalendar', { date })
       }
+     
     }
       try {
         request.open('GET', url_baidu)
