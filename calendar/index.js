@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-04-07 11:39:43
  * @LastEditors: 魏盛华
- * @LastEditTime: 2020-07-29 09:49:34
+ * @LastEditTime: 2020-11-18 16:44:14
  * @Author: 魏盛华
  */ 
 /*
@@ -41,7 +41,6 @@ import {
 import CalendarHeader from "./calendarHeader";
 import CalendarHead from "./calendarHead";
 import CalendarBody from "./calendarBody";
-
 import {Color} from "../res"
 
 export default class Calendar extends Component {
@@ -87,7 +86,8 @@ export default class Calendar extends Component {
           current={current}
           failClickBack={this.props.failClickBack}
           date={date}
-          callBackData={(data)=>this.props.callBackData(data)}
+          callBackData={(data) => this.props.callBackData(data)}
+          callBackResult={(result)=> this.props.callBackResult(result)}
           onSelectedChange={this.onSelectedChange}/>
       </View>
     );

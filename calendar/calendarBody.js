@@ -106,10 +106,6 @@ export default class CalendarBody extends Component {
    
   }
 
-  componentWillUnmount () {
-    this.subSc && this.subSc.remove()
-  }
-
   updateCalendar (forkDate = '') {
    
     let userDate = forkDate
@@ -118,9 +114,13 @@ export default class CalendarBody extends Component {
       this.setState({
         isClick:true
       })
+      this.props.callBackResult(almanac_data) //回传结果数据用来寻找今天数据
     })
   }
-
+  componentWillUnmount () {
+    this.subSc && this.subSc.remove()
+    this.setState=()=>false
+  }
   render() {
     let date = this.props.date
     let year = date.getFullYear()
@@ -243,12 +243,15 @@ export default class CalendarBody extends Component {
         }
        
       } else {
-      
-        // alert('请求失败！')
       }
     }
-    request.open('GET', url_baidu)
-    request.send()
+      try {
+        request.open('GET', url_baidu)
+        request.send()
+      } catch (error) {
+        this.props.failClickBack()
+      }
+
     }
   }
 }
