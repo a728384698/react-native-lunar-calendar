@@ -1,7 +1,7 @@
 /*
  * @Date: 2020-04-07 11:39:43
  * @LastEditors: 魏盛华
- * @LastEditTime: 2020-11-18 16:44:14
+ * @LastEditTime: 2020-11-20 14:14:53
  * @Author: 魏盛华
  */ 
 /*
@@ -61,6 +61,7 @@ export default class Calendar extends Component {
   };
 
   onSelectedChange = (new_date, date) => {
+    
     this.setState({
       current: date
     });

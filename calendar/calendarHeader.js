@@ -102,6 +102,9 @@ export default class CalendarHeader extends Component {
     })
   }
 
+  componentWillUnmount () {
+    this.setState = ()=> false
+  }
   render() {
     return (
       <View style={[styles.container, this.props.style]}>

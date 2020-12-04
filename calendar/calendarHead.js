@@ -1,4 +1,10 @@
 /*
+ * @Date: 2020-07-30 17:33:32
+ * @LastEditors: 魏盛华
+ * @LastEditTime: 2020-11-29 17:15:30
+ * @Author: 魏盛华
+ */
+/*
  * MIT License
  *
  * Copyright (c) 2017 Tang Xiaozhe.
@@ -42,7 +48,7 @@ export default class CalendarHead extends Component {
       let className = [styles.day, (index === 0 || index === 6 ? styles.weekend : '')];
       return (
         <View key={index} style={[className, this.props.style]}>
-          <Text>{text}</Text>
+          <Text style={{fontSize:13}}>{text}</Text>
         </View>
       );
     });

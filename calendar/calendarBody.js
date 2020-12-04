@@ -36,6 +36,7 @@ import {
 import getLunarDate from './getLunarDate'
 import { Style, Color } from '../res'
 import Tip from '../../../scripts/util/tips'
+import pxToDp from '../../../scripts/util/px-to-dp'
 
 export default class CalendarBody extends Component {
   constructor(props) {
@@ -110,6 +111,7 @@ export default class CalendarBody extends Component {
    
     let userDate = forkDate
     this.getBaiduMonthCalendarBody(userDate, (almanac_data) => {
+      console.log('2222-22222-22222')
       this.almanac_data = almanac_data
       this.setState({
         isClick:true
@@ -200,7 +202,7 @@ export default class CalendarBody extends Component {
 
         return (
           <TouchableOpacity key={index} style={[className]} onPress={pressCb}>
-            <Text>{day}</Text>
+            <Text style={{fontSize:13}}>{day}</Text>
             {lunarDateView}
           </TouchableOpacity>
         )
@@ -224,7 +226,9 @@ export default class CalendarBody extends Component {
       date +
       '&resource_id=6018&format=json'
       var request = new XMLHttpRequest()
+      console.log('11111-1111-11111')
       request.onreadystatechange = (e) => {
+
         try { 
       if (request.readyState !== 4) {
         return
@@ -239,10 +243,9 @@ export default class CalendarBody extends Component {
         // 数据解析失败，重新请求解析
         DeviceEventEmitter.emit('UpdateCalendar', { date })
       }
-     
     }
       try {
-        request.open('GET', url_baidu)
+        request.open('GET', url_baidu,true)
         request.send()
       } catch (error) {
         this.props.failClickBack()
